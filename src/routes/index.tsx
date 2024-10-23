@@ -1,33 +1,29 @@
 import * as React from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import { fetchHero, fetchMaterials } from '../lib/directus'
-import { useState, useEffect } from 'react'
+import { useText } from '../hooks/useText'
 
 export const Route = createFileRoute('/')({
   component: HomeComponent,
 })
 
+
 function HomeComponent() {
-  const [opsHero, setOpsHero] = useState<{title: string, copy:string} | null>(null);
-  const [materialsHero, setMaterialsHero] = useState<{title: string, copy:string} | null>(null);
+  const { isPending, error, data, isFetching } = useText()
+  
+  if (isPending) return 'Loading...'
 
-  useEffect(() => {
-    fetchHero().then(({ title, copy }) => setOpsHero({ title, copy }));
-    fetchMaterials().then(({ title, copy }) => setMaterialsHero({ title, copy }));
-  }, []);
-
-  if (!opsHero || !materialsHero) return <div>Loading...</div>;
+  if (error) return 'An error has occurred: ' + error.message
 
   return (
     <>
       <div className="p-2 m-10">
-        <h1 className='text-xl font-bold'>{opsHero.title}</h1>
-        <h3>{opsHero.copy}</h3>
+        <h1 className='text-xl font-bold'>{data.title}</h1>
+        <h3>{data.intro_info}</h3>
       </div>
 
       <div className="p-2 m-10">
-        <h1 className='text-xl font-bold'>{materialsHero.title}</h1>
-        <h3>{materialsHero.copy}</h3>
+        <h1 className='text-xl font-bold'>{data.subtitle}</h1>
+        <h3>{data.material_info}</h3>
       </div>
     </>   
     

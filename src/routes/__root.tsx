@@ -1,14 +1,17 @@
 import * as React from 'react'
 import { Link, Outlet, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 
 export const Route = createRootRoute({
   component: RootComponent,
 })
 
+const queryClient = new QueryClient()
+
 function RootComponent() {
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <div className="p-2 flex gap-2 text-lg">
         <Link
           to="/"
@@ -47,6 +50,6 @@ function RootComponent() {
       <hr />
       <Outlet />
       <TanStackRouterDevtools position="bottom-right" />
-    </>
+    </QueryClientProvider>
   )
 }
